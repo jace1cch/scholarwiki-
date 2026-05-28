@@ -1,0 +1,26 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: scholarwiki
+  datasource:
+    url: ${SEEKDB_URL:jdbc:mysql://localhost:2881/paismart}
+    username: ${SEEKDB_USER:root}
+    password: ${SEEKDB_PASSWORD:PaiSmart2025}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:PaiSmart2025}
+      timeout: 3000
+
+embedding:
+  api:
+    url: ${EMBEDDING_BASE_URL:https://dashscope.aliyuncs.com/compatible-mode/v1}
+    model: text-embedding-v4
+    dimension: 1024
