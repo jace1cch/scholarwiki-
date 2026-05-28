@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScholarWiki</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0e17;
+    --surface: #111827;
+    --border: #1e293b;
+    --text: #e2e8f0;
+    --text-dim: #64748b;
+    --accent: #60a5fa;
+    --accent-glow: rgba(96, 165, 250, 0.15);
+    --green: #34d399;
+    --amber: #fbbf24;
+    --radius: 12px;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(96, 165, 250, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(96, 165, 250, 0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .logo-icon {
+    width: 48px;
+    height: 48px;
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--accent);
+    background: var(--accent-glow);
+    box-shadow: 0 0 40px var(--accent-glow);
+  }
+
+  .logo-text {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .logo-text span { color: var(--accent); }
+
+  header p {
+    font-size: 16px;
+    color: var(--text-dim);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    background: rgba(52, 211, 153, 0.1);
+    color: var(--green);
+    border: 1px solid rgba(52, 211, 153, 0.2);
+    margin-top: 16px;
+  }
+
+  .status-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Section */
+  section { margin-bottom: 48px; }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* About cards */
+  .about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .card:hover {
+    border-color: rgba(96, 165, 250, 0.3);
+    box-shadow: 0 0 24px var(--accent-glow);
+  }
+
+  .card-icon {
+    font-size: 22px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .card p {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* Architecture flow */
+  .arch-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+    padding: 24px 0;
+  }
+
+  .arch-node {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    min-width: 100px;
+  }
+
+  .arch-node.accent {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+    color: var(--accent);
+  }
+
+  .arch-arrow {
+    color: var(--text-dim);
+    font-size: 18px;
+    padding: 0 8px;
+    font-weight: 300;
+  }
+
+  /* API List */
+  .api-group {
+    margin-bottom: 8px;
+  }
+
+  .api-group-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+
+  .api-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .api-row:hover {
+    border-color: rgba(96, 165, 250, 0.3);
+  }
+
+  .api-method {
+    flex: 0 0 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    padding: 10px 0;
+  }
+
+  .api-method.post { background: rgba(52, 211, 153, 0.1); color: var(--green); }
+  .api-method.get  { background: rgba(96, 165, 250, 0.1); color: var(--accent); }
+
+  .api-path {
+    flex: 1;
+    padding: 10px 14px;
+    font-weight: 500;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+  }
+
+  .api-desc {
+    flex: 0 0 auto;
+    padding: 10px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  /* Tech stack */
+  .tech-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tech-tag {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  .tech-tag.primary {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-glow);
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 32px 0 16px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .container { padding: 32px 16px; }
+    .api-desc { display: none; }
+    .arch-arrow { display: none; }
+    .arch-flow { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon">SW</div>
+      <div class="logo-text">Scholar<span>Wiki</span></div>
+    </div>
+    <p>Lightweight vector-powered academic paper wiki engine. Store, retrieve, and semantically search research paper notes with ease.</p>
+    <div class="status-badge">All systems operational</div>
+  </header>
+
+  <!-- About -->
+  <section>
+    <h2 class="section-title">About</h2>
+    <div class="about-grid">
+      <div class="card">
+        <span class="card-icon">📄</span>
+        <h3>Paper Notes</h3>
+        <p>Submit pre-processed paper reports with structured markdown. Automatic chunking and vectorization for semantic retrieval.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔍</span>
+        <h3>Vector Search</h3>
+        <p>Semantic search across all paper chunks using embedding-based cosine similarity. Find relevant content by meaning, not keywords.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🏷️</span>
+        <h3>Tag Navigation</h3>
+        <p>Agent-assigned tags for browsing and filtering papers by topic. Tags evolve as the agent's classification improves.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📝</span>
+        <h3>Annotations</h3>
+        <p>Simple paper-level notes in GitHub Issues style. No complex anchoring — just thoughts attached to papers.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture -->
+  <section>
+    <h2 class="section-title">Flow</h2>
+    <div class="card" style="padding: 20px 24px;">
+      <div class="arch-flow">
+        <span class="arch-node accent">Local Agent</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">POST /papers</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">Chunk Parse</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node accent">Vectorize</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">SeekDB</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- API Endpoints -->
+  <section>
+    <h2 class="section-title">API Endpoints</h2>
+
+    <div class="api-group">
+      <div class="api-group-label">Papers</div>
+
+      <div class="api-row">
+        <div class="api-method post">POST</div>
+        <div class="api-path">/api/v1/papers</div>
+        <div class="api-desc">Submit a paper with wikiMd → auto chunk & vectorize</div>
+      </div>
+
+      <div class="api-row">
+        <div class="api-method get">GET</div>
+        <div class="api-path">/api/v1/papers/{arxivId}</div>
+        <div class="api-desc">Get paper metadata, wikiMd & tags</div>
+      </div>
+
+      <div class="api-row">
+        <div class="api-method get">GET</div>
+        <div class="api-path">/api/v1/papers/{arxivId}/md</div>
+        <div class="api-desc">Get raw wiki markdown</div>
+      </div>
+
+      <div class="api-row">
+        <div class="api-method get">GET</div>
+        <div class="api-path">/api/v1/papers/search?q=&lt;query&gt;</div>
+        <div class="api-desc">Vector search across all paper chunks</div>
+      </div>
+    </div>
+
+    <div class="api-group">
+      <div class="api-group-label">Annotations</div>
+
+      <div class="api-row">
+        <div class="api-method post">POST</div>
+        <div class="api-path">/api/v1/annotations</div>
+        <div class="api-desc">Add a paper-level note</div>
+      </div>
+
+      <div class="api-row">
+        <div class="api-method get">GET</div>
+        <div class="api-path">/api/v1/annotations?arxivId=&lt;id&gt;</div>
+        <div class="api-desc">Get all notes for a paper</div>
+      </div>
+    </div>
+
+    <div class="api-group">
+      <div class="api-group-label">Admin</div>
+
+      <div class="api-row">
+        <div class="api-method post">POST</div>
+        <div class="api-path">/api/v1/admin/keys</div>
+        <div class="api-desc">Create a new API key (no auth)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech Stack -->
+  <section>
+    <h2 class="section-title">Tech Stack</h2>
+    <div class="tech-list">
+      <span class="tech-tag primary">Spring Boot 3.4</span>
+      <span class="tech-tag primary">Java 17</span>
+      <span class="tech-tag">SeekDB</span>
+      <span class="tech-tag">DashScope Embedding</span>
+      <span class="tech-tag">JdbcTemplate</span>
+      <span class="tech-tag">API Key Auth</span>
+    </div>
+  </section>
+
+  <footer>
+    ScholarWiki v2 &mdash; <a href="#">github.com/jace1cch/scholarwiki-</a>
+  </footer>
+
+</div>
+</body>
+</html>
