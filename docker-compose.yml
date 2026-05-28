@@ -18,15 +18,5 @@ services:
       timeout: 10s
       retries: 20
 
-  redis:
-    image: redis:7.0
-    container_name: scholarwiki-redis
-    ports:
-      - "6379:6379"
-    command: redis-server --requirepass PaiSmart2025
-    volumes:
-      - redis-data:/data
-
 volumes:
   seekdb-data:
-  redis-data:

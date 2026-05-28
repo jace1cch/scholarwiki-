@@ -12,13 +12,6 @@ spring:
     hikari:
       maximum-pool-size: 10
       minimum-idle: 2
-  data:
-    redis:
-      host: ${REDIS_HOST:localhost}
-      port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD:PaiSmart2025}
-      timeout: 3000
-
 embedding:
   api:
     url: ${EMBEDDING_BASE_URL:https://dashscope.aliyuncs.com/compatible-mode/v1}

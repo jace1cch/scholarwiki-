@@ -15,13 +15,6 @@ spring:
       mode: always
       schema-locations: classpath:schema-local.sql
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      password: PaiSmart2025
-      timeout: 3000
-
 logging:
   level:
     jace.scholarwiki: DEBUG
